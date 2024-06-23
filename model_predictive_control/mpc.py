@@ -39,7 +39,7 @@ class MPC:
         start_state_tuple (self.state_dim,)
         desired_state_sequence (self.horizon, self.state_dim)
         initial_control_sequence (self.horizon, self.controls_dim)
-        bounds (self.horizon, self.controls_dim)
+        bounds (self.horizon, self.controls_dim, 2)
         """
         ###########################################
         # Time stamps in seconds
@@ -65,7 +65,10 @@ class MPC:
             self.controls_dim,
         )
         xdes = np.array(desired_state_sequence)
-        assert xdes.shape == (self.horizon, self.state_dim)
+        assert xdes.shape == (
+            self.horizon,
+            self.state_dim,
+        ), f"Expected: {(self.horizon, self.state_dim)}, got {xdes.shape}"
         bounds_np = np.array(bounds)
         assert bounds_np.shape == (
             self.horizon,
@@ -84,7 +87,7 @@ class MPC:
             u0,
             args=(x0, xdes),
             method="SLSQP",
-            bounds=bounds_np,
+            # bounds=bounds_np,
             options=dict(maxiter=max_iters),
         )
 

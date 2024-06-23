@@ -2,3 +2,4 @@ numpy
 scipy
 simple_pid
 pydantic
+matplotlib
