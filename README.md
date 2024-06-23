@@ -2,6 +2,10 @@
 
 [![codecov](https://codecov.io/gh/AdityaNG/model_predictive_control/branch/main/graph/badge.svg?token=model_predictive_control_token_here)](https://codecov.io/gh/AdityaNG/model_predictive_control)
 [![CI](https://github.com/AdityaNG/model_predictive_control/actions/workflows/main.yml/badge.svg)](https://github.com/AdityaNG/model_predictive_control/actions/workflows/main.yml)
+[![GitHub License](https://img.shields.io/github/license/AdityaNG/model_predictive_control)](https://github.com/AdityaNG/model_predictive_control/blob/main/LICENSE)
+[![PyPI - Version](https://img.shields.io/pypi/v/model_predictive_control)](https://pypi.org/project/model_predictive_control/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/model_predictive_control)
+
 
 Python implementation of MPC solver
 
@@ -94,10 +98,9 @@ Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## TODO
 
-- [ ] Bicycle Model
+- [x] Bicycle Model
 - [ ] Drone Model
-- [ ] MPC
-- [ ] Visualizer Demo
-
+- [x] MPC
+- [x] Visualizer Demo
 - [ ] MPC Auto-Optimizer: Takes a set of expected vehicle trajectories and the search space of hyperparamters and returns the list of optimal hyperparameters
 - [ ] MPC Compiler: Takes the MPC model with a set of expected vehicle trajectories and produces numpy array a mapping from trajectory to control signals. This can be used with a cosine similarity logic to decide on control logic in real time.
