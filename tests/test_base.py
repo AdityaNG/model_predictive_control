@@ -1,5 +1,5 @@
-from project_name.base import NAME
+from model_predictive_control.base import NAME
 
 
 def test_base():
-    assert NAME == "project_name"
+    assert NAME == "model_predictive_control"
