@@ -92,6 +92,21 @@ $ python -m model_predictive_control
 $ model_predictive_control
 ```
 
+## Cite
+
+This work was a part of the D³Nav paper. Cite our work if you find it useful
+
+```bibtex
+@article{NG2024D3Nav,
+  title={D³Nav: Data-Driven Driving Agents for Autonomous Vehicles in Unstructured Traffic},
+  author={Aditya NG and Gowri Srinivas},
+  journal={The 35th British Machine Vision Conference (BMVC)},
+  year={2024},
+  url={https://bmvc2024.org/}
+}
+``` 
+
+
 ## Development
 
 Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
