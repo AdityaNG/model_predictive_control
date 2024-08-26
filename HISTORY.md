@@ -4,6 +4,12 @@ Changelog
 
 (unreleased)
 ------------
+- Feat(bicycle.py): centered model support. [AdityaNG]
+
+
+0.2.0 (2024-08-17)
+------------------
+- Release: version 0.2.0 🚀 [Aditya NG]
 - Version increment. [Aditya NG]
 - Feat(model_predictive_control/models/quadcopter.py): quadcopter
   support. [Aditya NG]
