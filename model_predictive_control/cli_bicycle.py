@@ -23,7 +23,9 @@ from model_predictive_control.models.bicycle import (
 from model_predictive_control.mpc import MPC
 
 
-def main():  # pragma: no cover
+def main(
+    origin,
+):  # pragma: no cover
     """
     The main function executes on commands:
     `python -m model_predictive_control` and `$ model_predictive_control `.
@@ -61,6 +63,7 @@ def main():  # pragma: no cover
                 throttle_min=-1.0,
                 throttle_max=1.0,
                 throttle_gain=5.0,  # Max throttle corresponds to 5m/s^2
+                origin=origin,
             )
             bicycle_model = BicycleModel(params)
 

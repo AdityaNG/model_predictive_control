@@ -1,3 +1,5 @@
+from typing import Callable
+
 import pytest
 import numpy as np
 from model_predictive_control.models.bicycle import (
@@ -5,7 +7,8 @@ from model_predictive_control.models.bicycle import (
     BicycleModelParams,
     BicycleModelState,
     BicycleModelInputs,
-    bicycle_model,
+    bicycle_model_rear_axel_center,
+    bicycle_model_wheel_base_center,
 )
 
 
@@ -67,7 +70,11 @@ def test_state_initialization_and_conversion():
     assert new_state.velocity == 3.0
 
 
-def test_bicycle_model_dynamics():
+@pytest.mark.parametrize(
+    "bicycle_model",
+    [bicycle_model_rear_axel_center, bicycle_model_wheel_base_center],
+)
+def test_bicycle_model_dynamics(bicycle_model: Callable):
     x = (0.0, 0.0, 0.0, 1.0)  # (X, Y, theta, velocity)
     u = 10.0  # steering angle in degrees
     steering_ratio = 15.0

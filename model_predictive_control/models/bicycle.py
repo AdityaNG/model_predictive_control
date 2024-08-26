@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, cast
+from typing import List, Literal, Optional, Tuple, cast
 
 import numpy as np
 from simple_pid import PID
@@ -22,6 +22,9 @@ class BicycleModelParams(BaseRobotParams):
     throttle_min: float
     throttle_max: float
     throttle_gain: float
+    origin: Literal["rear_axel_center", "wheel_base_center"] = (
+        "rear_axel_center"
+    )
 
 
 class BicycleModelState(BaseRobotState):
@@ -72,7 +75,7 @@ class BicycleModelInputs(BaseRobotInputs):
         )
 
 
-def bicycle_model(
+def bicycle_model_rear_axel_center(
     x: Tuple[float, float, float, float],
     u: float,
     velocity: float,
@@ -97,6 +100,37 @@ def bicycle_model(
     x_next[0] = x[0] + (velocity * np.cos(x_next[2]) * time_step)  # x pos
     x_next[1] = x[1] + (velocity * np.sin(x_next[2]) * time_step)  # y pos
     x_next[3] = velocity
+    return (x_next[0], x_next[1], x_next[2], x_next[3])
+
+
+def bicycle_model_wheel_base_center(
+    x: Tuple[float, float, float, float],
+    u: float,
+    velocity: float,
+    steering_ratio: float,
+    wheel_base: float,
+    time_step: float,
+) -> Tuple[float, float, float, float]:
+    """
+    x <- (X, Y, theta, velocity)
+    u <- steering angle
+    Origin is at the center of the wheelbase
+    """
+    delta = np.radians(u) / steering_ratio
+    x_next: List[float] = [0.0, 0.0, 0.0, 0.0]
+
+    # Calculate change in theta
+    delta_theta = velocity / wheel_base * np.tan(delta) * time_step
+    x_next[2] = x[2] + delta_theta  # theta
+
+    # Calculate displacement of the center point
+    displacement = velocity * time_step
+
+    # Calculate new position
+    x_next[0] = x[0] + displacement * np.cos(x[2] + delta_theta / 2)  # x pos
+    x_next[1] = x[1] + displacement * np.sin(x[2] + delta_theta / 2)  # y pos
+    x_next[3] = velocity
+
     return (x_next[0], x_next[1], x_next[2], x_next[3])
 
 
@@ -131,6 +165,7 @@ class BicycleModel(BaseRobotModel):
             params.throttle_min,
             params.throttle_max,
         )
+        self.origin = params.origin
 
     def reset(self) -> None:
         self.speed_pid.reset()
@@ -157,13 +192,25 @@ class BicycleModel(BaseRobotModel):
 
         state_m.velocity = new_velocity
 
-        next_state_tup = bicycle_model(
-            state_m.totuple(),
-            inputs_m.steering_angle,
-            inputs_m.desired_velocity,
-            self.steering_ratio,
-            self.wheel_base,
-            self.time_step,
-        )
+        if self.origin == "rear_axel_center":
+            next_state_tup = bicycle_model_rear_axel_center(
+                state_m.totuple(),
+                inputs_m.steering_angle,
+                inputs_m.desired_velocity,
+                self.steering_ratio,
+                self.wheel_base,
+                self.time_step,
+            )
+        elif self.origin == "wheel_base_center":
+            next_state_tup = bicycle_model_wheel_base_center(
+                state_m.totuple(),
+                inputs_m.steering_angle,
+                inputs_m.desired_velocity,
+                self.steering_ratio,
+                self.wheel_base,
+                self.time_step,
+            )
+        else:
+            raise ValueError(f"Unknown origin: {self.origin}")
 
         return BicycleModelState.fromtuple(next_state_tup)

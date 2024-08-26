@@ -6,7 +6,7 @@ from model_predictive_control.cli_bicycle import (
     main as main_bicycle,
 )  # pragma: no cover
 from model_predictive_control.cli_drone import (
-    main as drone_main,
+    main as main_drone,
 )  # pragma: no cover
 
 
@@ -16,7 +16,11 @@ def main():
     )
     parser.add_argument(
         "demo",
-        choices=["bicycle", "drone"],
+        choices=[
+            "bicycle_rear_axel_center",
+            "bicycle_wheel_base_center",
+            "drone",
+        ],
         help="Which demo to run: 'bicycle' or 'drone'",
         nargs="?",
         default="bicycle",
@@ -25,10 +29,12 @@ def main():
     args = parser.parse_args()
     demo = args.demo
 
-    if demo == "bicycle":
-        main_bicycle()
+    if demo == "bicycle_rear_axel_center":
+        main_bicycle(origin="rear_axel_center")
     elif demo == "drone":
-        drone_main()
+        main_drone()
+    elif demo == "bicycle_wheel_base_center":
+        main_bicycle(origin="wheel_base_center")
     else:
         parser.print_help()
         print("Unknown demo")
